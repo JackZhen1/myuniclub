@@ -25,7 +25,7 @@ function App() {
   return (
     <div>
       <Navbar />
-      <div className='flex'>
+      <div className='flex bg-[#f9fafb]'>
         <Sidebar setActiveTab={setActiveTab}/>
         {activeTab === 'Posts' && <Postlist posts = {posts}/>}
       </div>

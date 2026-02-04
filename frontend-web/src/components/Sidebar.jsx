@@ -8,13 +8,15 @@ const Sidebar = ({ setActiveTab }) => {
     return (
         <aside className="w-30 h-screen flex flex-col items-center shadow-sm bg-[#78977C] ">
             {menuItems.map((item) => (
-                <button className="w-full py-8 border-b border-gray-50 text-white cursor-pointer hover:bg-[#658068]"
+                <button className={`w-full py-8 border-b border-gray-50 text-white hover:bg-[#658068]
+                    ${item.disabled
+                        ? 'opacity-50' : 'cursor-pointer'}
+                `}
                 key={item.name}
                 disabled={item.disabled}
                 onClick={()=> !item.disabled && setActiveTab(item.name) }
                 >{item.name}</button>
-            )
-            )}
+            ))}
         </aside>        
     );
 };
