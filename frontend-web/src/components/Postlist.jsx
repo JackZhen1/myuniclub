@@ -24,9 +24,9 @@ const Postlist = ({posts, isLoading}) => {
                 ): posts.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-64 text-gray-500">add a new</div>
                 ): (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 h-full w-full">
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 p-6 h-full w-full">
                     {posts.map((post) => (
-                        <section className='h-50 p-4 rounded-2xl border m-8 bg-white shadow-md'>
+                        <section className='h-100 p-4 rounded-2xl border m-8 bg-white shadow-md'>
                             <h1 className=''>{post.title}</h1>
                             <p>{post.content}</p>
                         </section>

@@ -3,16 +3,24 @@ import { useState } from "react";
 const PostModal = ({onClose}) => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
+    const [images, setImages] = useState();
 
     const handleSubmit = async(e) => {
         e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', content);
+        if (images) {
+            Array.from(images).forEach(image => {
+                formData.append('images[]', image);
+            })
+        }
+        
         try{
             const response = await fetch("http://localhost:8000/api/posts", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({title, content})
+                body: formData
             });
             if (response.ok) {
                 console.log("Post created successfully!")
@@ -20,7 +28,6 @@ const PostModal = ({onClose}) => {
         }catch (error){
             console.error("Failed to create new post: ", error)
         }
-        
     }
 
     return (
@@ -39,6 +46,7 @@ const PostModal = ({onClose}) => {
                         placeholder="Enter your post content here..."
                         value={content} onChange={(e) => setContent(e.target.value)}
                     />
+                    <input type="file" multiple className="" onChange={(e) => setImages(e.target.files)}/>
                     <div className="flex justify-end pt-4 gap-2 w-full">
                         <button type="submit" className="p-3 bg-[#78977C] rounded-xl">
                             <span className="text-white">Submit</span>

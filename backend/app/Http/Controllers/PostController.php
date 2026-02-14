@@ -8,10 +8,20 @@ use App\Models\Post;
 class PostController extends Controller
 {
     public function store(Request $request) {
-        Post::create([
+        $post = Post::create([
             'title' => $request->title,
             'content' => $request->content
         ]);
+
+        if($request->hasFile('images')) {
+            $files = $request->file('images');
+            foreach ($files as $file) {
+                $path = $file->store('posts', 'public');
+                $post->images()->create([
+                    'image_path' => $path
+                ]);
+            };
+        };
 
         return response()->json(['message' => 'Successfully created post!']);
     }
