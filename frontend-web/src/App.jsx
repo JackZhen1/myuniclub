@@ -7,6 +7,7 @@ import Postlist from './components/Postlist'
 function App() {
   const [posts, setPosts] = useState([]);
   const [activeTab, setActiveTab] = useState('Posts');
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -14,6 +15,7 @@ function App() {
         const response = await fetch('http://localhost:8000/api/posts');
         const data = await response.json();
         setPosts(data);
+        setLoading(false);
       } catch (error){
         console.error("Failed to fetch posts.")
       }
@@ -27,7 +29,9 @@ function App() {
       <Navbar />
       <div className='flex bg-[#f9fafb]'>
         <Sidebar setActiveTab={setActiveTab}/>
-        {activeTab === 'Posts' && <Postlist posts = {posts}/>}
+        {activeTab === 'Posts' && 
+        
+        <Postlist posts = {posts} isLoading = {isLoading}/>}
       </div>
       
       
