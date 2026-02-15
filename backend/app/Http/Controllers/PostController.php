@@ -27,7 +27,7 @@ class PostController extends Controller
     }
 
     public function getAllPosts() {
-        $posts = Post::all();
+        $posts = Post::with('images')->get();
         return response()->json($posts);
     }
 

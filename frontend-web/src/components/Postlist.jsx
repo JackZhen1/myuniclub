@@ -1,4 +1,5 @@
 import PostModal from "./PostModal";
+import Postcard from "./Postcard";
 import { useState } from "react";
 
 const ToolBar = ({setIsModalOpen}) => (
@@ -25,12 +26,7 @@ const Postlist = ({posts, isLoading}) => {
                     <div className="flex flex-col items-center justify-center h-64 text-gray-500">add a new</div>
                 ): (
                 <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 p-6 h-full w-full">
-                    {posts.map((post) => (
-                        <section className='h-100 p-4 rounded-2xl border m-8 bg-white shadow-md'>
-                            <h1 className=''>{post.title}</h1>
-                            <p>{post.content}</p>
-                        </section>
-                    ))} 
+                    {posts.map((post) => <Postcard key={post.id} post={post}/>)}
                 </div>)}
             </div>
         </div>
