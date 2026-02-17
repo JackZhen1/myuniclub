@@ -4,8 +4,12 @@ const Postcard = ({post, onClick}) => {
         <div className="group" onClick={onClick}>
             <section className='h-100 rounded-2xl border m-8 bg-white shadow-md overflow-hidden transition-transform duration-500 group-hover:scale-105'>
                 <div className="aspect-3/4 ">
+                    {post.images?.[0] ? 
                     <img src={baseUrl + post.images?.[0]?.image_path} 
-                    className="w-full h-full object-cover "/>
+                    className="w-full h-full object-cover "/> :
+                    <div className="flex h-full items-center justify-center">
+                        <span className="">No Post Image</span>
+                    </div>}
                 </div>
                 <div className="flex justify-center h-full">
                     <h1 className=''>{post.title}</h1>
