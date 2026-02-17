@@ -1,9 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const PostModal = ({onClose}) => {
+const PostModal = ({onClose, post, onSuccess}) => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [images, setImages] = useState();
+    const [message, setMessage]= useState('');
+
+    useEffect(()=> {
+        if (post) {
+            setTitle(post.title);
+            setContent(post.content);
+        };
+    }, [post]);
+
+    useEffect(()=> {
+        if (message) {
+            const timer = setTimeout(()=> setMessage(''), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -11,6 +26,10 @@ const PostModal = ({onClose}) => {
         const formData = new FormData();
         formData.append('title', title);
         formData.append('content', content);
+        
+        if (post) {
+            formData.append('_method', 'PUT');
+        }
         if (images) {
             Array.from(images).forEach(image => {
                 formData.append('images[]', image);
@@ -18,12 +37,15 @@ const PostModal = ({onClose}) => {
         }
         
         try{
-            const response = await fetch("http://localhost:8000/api/posts", {
+            const url = post ? `http://localhost:8000/api/posts/${post.id}` : "http://localhost:8000/api/posts";
+            const response = await fetch(url, {
                 method: "POST",
                 body: formData
             });
             if (response.ok) {
-                console.log("Post created successfully!")
+                const data = await response.json();
+                setMessage(data.message);
+                onSuccess(data.post);
             }
         }catch (error){
             console.error("Failed to create new post: ", error)
@@ -47,6 +69,7 @@ const PostModal = ({onClose}) => {
                         value={content} onChange={(e) => setContent(e.target.value)}
                     />
                     <input type="file" multiple className="" onChange={(e) => setImages(e.target.files)}/>
+                    {message && <span>{message}</span>}
                     <div className="flex justify-end pt-4 gap-2 w-full">
                         <button type="submit" className="p-3 bg-[#78977C] rounded-xl">
                             <span className="text-white">Submit</span>

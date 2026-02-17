@@ -22,8 +22,8 @@ class PostController extends Controller
                 ]);
             };
         };
-
-        return response()->json(['message' => 'Successfully created post!']);
+        return response()->json(['message' => 'Successfully created post!',
+        'post' => $post]);
     }
 
     public function getAllPosts() {
@@ -33,5 +33,17 @@ class PostController extends Controller
 
     public function getPost(Post $post) {
         return response()->json($post);
+    }
+
+    public function update(Request $request, $id) {
+        $post = Post::findOrFail($id);
+
+        $post->update([
+            'title' => $request->title,
+            'content' => $request->content
+        ]);
+        return response()->json(['message' => 'Successfully updated post!',
+        'post' => $post
+        ]);
     }
 }
