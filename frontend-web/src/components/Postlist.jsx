@@ -1,5 +1,6 @@
 import PostModal from "./PostModal";
 import Postcard from "./Postcard";
+import DeleteConfirmModal from "./DeleteConfirmModal";
 import { useState, useEffect } from "react";
 
 const ToolBar = ({openCreateModal}) => (
@@ -16,6 +17,13 @@ const Postlist = () => {
     const [isLoading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingPost, setEditingPost] = useState(null);
+    const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] = useState(false);
+    const [deletePostId , setDeletePostId] = useState('');
+    
+    const openDeleteConfirmModal = (postId) => {
+        setDeletePostId(postId);
+        setIsDeleteConfirmModalOpen(true);
+    };
     
     useEffect(() => {
     const fetchPosts = async () => {
@@ -54,6 +62,25 @@ const Postlist = () => {
         };
     };
 
+    const handleDeletePost = async () => {
+        if (!deletePostId) return;
+
+        try {
+            const response = await fetch(`http://localhost:8000/api/posts/${deletePostId}`, {
+                method: "DELETE",
+            });
+
+            if (response.ok) {
+                console.log("Post has been deleted.");
+                setPosts(posts.filter(p => p.id !== deletePostId));
+                setIsDeleteConfirmModalOpen(false);
+                setDeletePostId(null);
+            }
+        } catch (error) {
+            console.error("Failed to delete post:", error);
+        }
+    };
+
     return (
         <div className="border w-full p-4">
             <ToolBar openCreateModal={openCreateModal}/>
@@ -61,6 +88,8 @@ const Postlist = () => {
                 setIsModalOpen(false);
                 setEditingPost(null); 
                 }} onSuccess={handleUpdateSuccess}/>}
+            
+            {isDeleteConfirmModalOpen && <DeleteConfirmModal onClose={() => setIsDeleteConfirmModalOpen(false)} onConfirm={handleDeletePost}/>}
             <div>
                 {isLoading ? (
                     <div className="flex flex-1 items-center justify-center text-gray-400">
@@ -70,9 +99,10 @@ const Postlist = () => {
                     <div className="flex flex-col items-center justify-center h-64 text-gray-500">add a new</div>
                 ): (
                 <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 p-6 h-full w-full">
-                    {posts.map((post) => <Postcard key={post.id} post={post} onClick={() => openEditModal(post)}/>)}
+                    {posts.map((post) => <Postcard key={post.id} post={post} onClick={() => openEditModal(post)} onDelete={openDeleteConfirmModal}/>)}
                 </div>)}
             </div>
+            
         </div>
     );
 };
