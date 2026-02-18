@@ -46,4 +46,16 @@ class PostController extends Controller
         'post' => $post
         ]);
     }
+
+    public function delete($id) {
+        $post = Post::findOrFail($id);
+
+        foreach ($post->images as $image) {
+            Storage::disk('public')->delete($image->image_path);
+        };
+        $post->delete();
+        return response()->json([
+        'message' => 'Post and associated images deleted successfully!'
+        ]);
+    }
 }
