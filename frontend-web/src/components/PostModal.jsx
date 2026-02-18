@@ -46,6 +46,9 @@ const PostModal = ({onClose, post, onSuccess}) => {
                 const data = await response.json();
                 setMessage(data.message);
                 onSuccess(data.post);
+                setTimeout(() => {
+                onClose(); 
+                }, 1500);
             }
         }catch (error){
             console.error("Failed to create new post: ", error)
