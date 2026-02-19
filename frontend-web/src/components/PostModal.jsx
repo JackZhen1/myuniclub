@@ -58,7 +58,9 @@ const PostModal = ({onClose, post, onSuccess}) => {
     return (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
             <div className="w-7/10 h-4/5 bg-white flex flex-col items-center">
-                <h1 className="text-2xl font-bold p-4">Create A Post</h1>
+                {post? <h1 className="text-2xl font-bold p-4">Edit A Post</h1>:
+                <h1 className="text-2xl font-bold p-4">Create A Post</h1>}
+                
                 <form className="w-full h-5/6 flex flex-col items-center p-4"
                 onSubmit={handleSubmit}>
                     <input 
