@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const Postcard = ({post, onClick, onDelete}) => {
     const baseUrl = "http://localhost:8000/storage/";
     
@@ -10,7 +8,7 @@ const Postcard = ({post, onClick, onDelete}) => {
 
     return (
         <div className="group" onClick={onClick}>
-            <section className='h-100 rounded-2xl border m-8 bg-white shadow-md overflow-hidden transition-transform duration-500 group-hover:scale-105 flex flex-col cursor-pointer'>
+            <section className='h-100 rounded-2xl border bg-white shadow-md overflow-hidden transition-transform duration-500 group-hover:scale-105 flex flex-col cursor-pointer'>
                 <div className="aspect-3/4 ">
                     {post.images?.[0] ? 
                     <img src={baseUrl + post.images?.[0]?.image_path} 

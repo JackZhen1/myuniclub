@@ -3,14 +3,15 @@ import Postcard from "./Postcard";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import { useState, useEffect } from "react";
 
-const ToolBar = ({openCreateModal}) => (
-    <div className="bg-white">
-        <button className="p-2 rounded-xl bg-blue-400 shadow"
-        onClick={()=> openCreateModal()}>
-            <span className="text-white">Add post</span>
+const NewPostCard = ({openModal}) => (
+    <div className="group h-full w-full">
+        <button className='rounded-2xl border bg-[#F2F5EF] shadow-md transition-transform duration-500 group-hover:scale-105 cursor-pointer w-full h-100'
+        onClick={openModal}>
+            <span className="text-center font-bold text-[#5D5A88] group-hover/btn:text-white">+ Add Post</span>
         </button>
     </div>
 );
+
 
 const Postlist = () => {
     const [posts, setPosts] = useState([]);
@@ -83,7 +84,7 @@ const Postlist = () => {
 
     return (
         <div className="border w-full p-4">
-            <ToolBar openCreateModal={openCreateModal}/>
+            
             {isModalOpen && <PostModal post={editingPost} onClose={() => {
                 setIsModalOpen(false);
                 setEditingPost(null); 
@@ -95,10 +96,9 @@ const Postlist = () => {
                     <div className="flex flex-1 items-center justify-center text-gray-400">
                         <p className="animate-pulse">Loading amazing posts...</p>
                     </div>
-                ): posts.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-64 text-gray-500">add a new</div>
                 ): (
-                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 p-6 h-full w-full">
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-10 p-6 h-full w-full">
+                    <NewPostCard openModal={openCreateModal}/>
                     {posts.map((post) => <Postcard key={post.id} post={post} onClick={() => openEditModal(post)} onDelete={openDeleteConfirmModal}/>)}
                 </div>)}
             </div>
