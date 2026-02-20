@@ -73,7 +73,11 @@ const PostModal = ({onClose, post, onSuccess}) => {
                         placeholder="Enter your post content here..."
                         value={content} onChange={(e) => setContent(e.target.value)}
                     />
-                    <input type="file" multiple className="" onChange={(e) => setImages(e.target.files)}/>
+                    <label htmlFor="file-upload" className="mt-8">
+                        <span className="border p-2">Upload images</span>
+                        <input id="file-upload" type="file" multiple className="hidden" onChange={(e) => setImages(e.target.files)}/>
+                    </label>
+                   
                     {message && <span>{message}</span>}
                     <div className="flex justify-end pt-4 gap-2 w-full">
                         <button type="submit" className="p-3 bg-[#78977C] rounded-xl">
