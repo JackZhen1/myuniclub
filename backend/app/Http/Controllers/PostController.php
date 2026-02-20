@@ -44,6 +44,17 @@ class PostController extends Controller
             'title' => $request->title,
             'content' => $request->content
         ]);
+        
+        if($request->hasFile('images')) {
+            $files = $request->file('images');
+            foreach ($files as $file) {
+                $path = $file->store('posts', 'public');
+                $post->images()->create([
+                    'image_path' => $path
+                ]);
+            };
+        };
+        $post->load('images');
         return response()->json(['message' => 'Successfully updated post!',
         'post' => $post
         ]);
