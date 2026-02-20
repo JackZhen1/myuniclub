@@ -6,10 +6,18 @@ const PostModal = ({onClose, post, onSuccess}) => {
     const [images, setImages] = useState();
     const [message, setMessage]= useState('');
 
+    const baseUrl = "http://localhost:8000/storage/";
     useEffect(()=> {
         if (post) {
             setTitle(post.title);
             setContent(post.content);
+            const imageArray = post.images.map((image)=> {
+                return {
+                    'key': image.id,
+                    'preview': baseUrl + image.image_path
+                }
+            })
+            setImages(imageArray);
         };
     }, [post]);
 
@@ -31,8 +39,8 @@ const PostModal = ({onClose, post, onSuccess}) => {
             formData.append('_method', 'PUT');
         }
         if (images) {
-            Array.from(images).forEach(image => {
-                formData.append('images[]', image);
+            images.forEach(image => {
+                formData.append('images[]', image.file);
             })
         }
         
@@ -55,6 +63,19 @@ const PostModal = ({onClose, post, onSuccess}) => {
         }
     }
 
+    const handleImageChange = (e) => {
+        if (e.target.files) {
+            const fileArray = Array.from(e.target.files);
+            const newImages = fileArray.map((file) => {
+                return {
+                    'file': file,
+                    'preview': URL.createObjectURL(file)
+                }
+            });
+            setImages(newImages);
+        }
+    };
+
     return (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
             <div className="w-7/10 h-4/5 bg-white flex flex-col items-center">
@@ -75,9 +96,17 @@ const PostModal = ({onClose, post, onSuccess}) => {
                     />
                     <label htmlFor="file-upload" className="mt-8">
                         <span className="border p-2">Upload images</span>
-                        <input id="file-upload" type="file" multiple className="hidden" onChange={(e) => setImages(e.target.files)}/>
+                        <input id="file-upload" type="file" multiple className="hidden" onChange={handleImageChange}/>
                     </label>
-                   
+                    {images && 
+                    <div className="flex justify-center">
+                        {images.map((image)=> ( 
+                            <div key={image.preview} className="overflow-hidden mt-4 p-1">
+                                <img src={image.preview} className="w-30 h-40 object-cover"/>
+                            </div>
+                        ))}
+                    </div>
+                    }   
                     {message && <span>{message}</span>}
                     <div className="flex justify-end pt-4 gap-2 w-full">
                         <button type="submit" className="p-3 bg-[#78977C] rounded-xl">
