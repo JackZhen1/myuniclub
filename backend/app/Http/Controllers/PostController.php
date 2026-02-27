@@ -33,7 +33,8 @@ class PostController extends Controller
         return response()->json($posts);
     }
 
-    public function getPost(Post $post) {
+    public function getPost(Request $request, $id) {
+        $post = Post::with('images')->find($id);
         return response()->json($post);
     }
 

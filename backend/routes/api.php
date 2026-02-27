@@ -11,7 +11,7 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/posts', [PostController::class, 'store']);
 Route::get('/posts', [PostController::class, 'getAllPosts']);
-Route::get('/posts/{post}', [PostController::class, 'getPost']);
+Route::get('/posts/{id}', [PostController::class, 'getPost']);
 Route::put('posts/{id}', [PostController::class, 'update']);
 Route::delete('posts/{id}', [PostController::class, 'delete']);
 Route::delete('images/{id}', [ImageController::class, 'delete']);
